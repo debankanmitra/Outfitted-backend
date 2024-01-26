@@ -73,3 +73,32 @@ class Review(models.Model):
     def __str__(self):
         return self.product
 
+
+# extras ------------------------------------------------------------------
+# pass statement is a null operation, and it will not affect the interpretation of the class's fields.
+
+class Order(models.Model):
+    pass
+    # id = models.AutoField(primary_key=True)
+    # user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
+    # order_date = models.DateTimeField(auto_now_add=True)
+    # total_amount = models.DecimalField(max_digits=6, decimal_places=2)
+    # status = models.CharField(max_length=255)
+
+
+class OrderItem(models.Model):
+    pass
+    # id = models.AutoField(primary_key=True)
+    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # quantity = models.IntegerField()
+    # price = models.DecimalField(max_digits=6, decimal_places=2)
+    # order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+
+class Payment(models.Model):
+    pass
+    # id = models.AutoField(primary_key=True)
+    # order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    # payment_date = models.DateTimeField(auto_now_add=True)
+    # amount = models.DecimalField(max_digits=6, decimal_places=2)
+    # method = models.CharField(max_length=255)
