@@ -40,3 +40,6 @@ Feel free to contribute, report issues, or suggest improvements. Let's make fash
 ---
 
 Feel free to customize this description based on specific features or aspects of your application that you'd like to highlight.
+
+schema: https://dbdesigner.page.link/wPfW66nAy3G1bCRF6
+
