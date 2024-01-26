@@ -26,7 +26,7 @@ class UserDetails(models.Model):
         return self.name
     
 
-class ProductCard(models.Model):
+class Product(models.Model):
     productid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, unique=True, editable=False
     )
@@ -40,34 +40,19 @@ class ProductCard(models.Model):
     mrp = models.DecimalField(max_digits=6, decimal_places=2)
     discount = models.IntegerField(max_length=255)
 
-    def __str__(self):
-        return self.product
-
-
-class ProductDetails(models.Model):
-    productid = models.ForeignKey(ProductCard, on_delete=models.CASCADE)
-    category = models.CharField(max_length=255)
-    Images = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    ratings = models.IntegerField(max_length=255)
-    buys = models.IntegerField(max_length=255)
-    mrp = models.DecimalField(max_digits=6, decimal_places=2)
-    discount = models.IntegerField(max_length=255)
-
-    title = models.CharField(max_length=255)
-    size = models.CharField(max_length=255)
-    product_code = models.CharField(max_length=255)
-    color = models.CharField(max_length=255)
-    seller = models.CharField()
+    title = models.CharField(max_length=255,  blank=True)
+    size = models.CharField(max_length=255,  blank=True)
+    product_code = models.CharField(max_length=255,  blank=True)
+    color = models.CharField(max_length=255,  blank=True)
+    seller = models.CharField( blank=True)
 
     def __str__(self):
-        return self.product
+        return self.name
+
     
 class Cart(models.Model):
     user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductDetails, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
     def __str__(self):
@@ -78,8 +63,12 @@ class Cart(models.Model):
     # also delete the ProductDetails instances associated with it.
 class Review(models.Model):
     user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
-    product = models.ForeignKey(ProductDetails, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     review = models.CharField(max_length=255)
+    rating = models.IntegerField(max_length=255)
+    date = models.DateField()
+    likes = models.IntegerField()
+    dislikes = models.IntegerField()
 
     def __str__(self):
         return self.product
