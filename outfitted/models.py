@@ -23,7 +23,7 @@ class UserDetails(models.Model):
     wishlist = ArrayField(models.CharField(max_length=255),default=list)
 
     def __str__(self):
-        return self.id
+        return self.name
     
 
 class Product(models.Model):
@@ -35,16 +35,16 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    ratings = models.IntegerField(max_length=255)
-    buys = models.IntegerField(max_length=255)
+    ratings = models.IntegerField()
+    buys = models.IntegerField()
     mrp = models.DecimalField(max_digits=6, decimal_places=2)
-    discount = models.IntegerField(max_length=255)
+    discount = models.IntegerField()
 
     title = models.CharField(max_length=255,  blank=True)
     size = models.CharField(max_length=255,  blank=True)
     product_code = models.CharField(max_length=255,  blank=True)
     color = models.CharField(max_length=255,  blank=True)
-    seller = models.CharField( blank=True)
+    seller = models.CharField(blank=True)
 
     def __str__(self):
         return self.name
@@ -65,7 +65,7 @@ class Review(models.Model):
     user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     review = models.CharField(max_length=255)
-    rating = models.IntegerField(max_length=255)
+    rating = models.IntegerField()
     date = models.DateField()
     likes = models.IntegerField()
     dislikes = models.IntegerField()
