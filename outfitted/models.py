@@ -23,7 +23,7 @@ class UserDetails(models.Model):
     wishlist = ArrayField(models.CharField(max_length=255),default=list)
 
     def __str__(self):
-        return self.name
+        return self.id
     
 
 class Product(models.Model):

@@ -30,10 +30,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.users.apps.UsersConfig',
-    'apps.products.apps.ProductsConfig',
-    'apps.cart.apps.CartConfig',
-    'apps.orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
@@ -70,24 +66,21 @@ WSGI_APPLICATION = 'outfitted.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-database = os.environ["COCKROACH_DB"]
-username = os.environ["COCKROACH_POSTGRES_USER"]
-password = os.environ["COCKROACH_POSTGRES_PASSWORD"]
-host = os.environ["COCKROACH_HOST"]
-port = os.environ["COCKROACH_PORT"]
 DATABASES = {
     'default': {
         'ENGINE': 'django_cockroachdb',
-        'NAME': '{database}',
-        'USER': '{username}',
-        'PASSWORD': '{password}',
-        'HOST': '{host}',
-        'PORT': '{port}',
+        'NAME': 'ecommercedb',
+        'USER': 'debankan',
+        'PASSWORD': os.environ['COCKROACH_POSTGRES_PASSWORD'],
+        'HOST': 'ecommerce-django-13244.7tt.aws-us-east-1.cockroachlabs.cloud',
+        'PORT': '26257',
         'OPTIONS': {
-            'sslmode': 'verify-full'
+            'sslmode': 'verify-full',
+            'sslrootcert': '/home/devfedora/.postgresql/root.crt',
         },
     },
 }
+
 
 
 # Password validation
