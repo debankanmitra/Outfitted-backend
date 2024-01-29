@@ -16,10 +16,14 @@ class UserDetails(models.Model):
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
-        editable=False)
+        editable=False,
+        unique=True,
+        auto_created=True,
+        )
     name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255,blank=True)
-    profile_pic = models.CharField(max_length=255,blank=True)
+    address = models.TextField(max_length=255,blank=True)
+    email = models.EmailField(max_length=255,blank=True)
+    profile_pic = models.ImageField(max_length=255,blank=True)
     wishlist = ArrayField(models.CharField(max_length=255),default=list)
 
     def __str__(self):
@@ -31,17 +35,17 @@ class Product(models.Model):
         primary_key=True, default=uuid.uuid4, unique=True, editable=False
     )
     category = models.CharField(max_length=255)
-    Images = models.CharField(max_length=255)
+    Images = models.ImageField(max_length=255)
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.TextField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     ratings = models.IntegerField()
     buys = models.IntegerField()
     mrp = models.DecimalField(max_digits=6, decimal_places=2)
-    discount = models.IntegerField()
+    discount = models.PositiveIntegerField()
 
-    title = models.CharField(max_length=255,  blank=True)
-    size = models.CharField(max_length=255,  blank=True)
+    title = models.TextField(max_length=255,  blank=True)
+    size = models.CharField(max_length=255,  blank=True) # for choice: https://docs.djangoproject.com/en/5.0/topics/db/models/
     product_code = models.CharField(max_length=255,  blank=True)
     color = models.CharField(max_length=255,  blank=True)
     seller = models.CharField(blank=True)
@@ -64,7 +68,7 @@ class Cart(models.Model):
 class Review(models.Model):
     user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    review = models.CharField(max_length=255)
+    review = models.TextField(max_length=255)
     rating = models.IntegerField()
     date = models.DateField()
     likes = models.IntegerField()
