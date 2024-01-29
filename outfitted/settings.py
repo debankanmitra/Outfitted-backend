@@ -34,11 +34,13 @@ INSTALLED_APPS = [
     'outfitted',
 ]
 
+
+# It is a permission class that combines Django's standard model permissions with read-only access for unauthenticated users.
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.AllowAny',
     ]
 }
 

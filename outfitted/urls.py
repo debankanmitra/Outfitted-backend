@@ -23,6 +23,8 @@ from . import views
 router = SimpleRouter()
 router.register(r'users', views.UserDetails, basename='users')
 
+# for patch
+# /users/{pk}/action_name/
 
 urlpatterns = [
     path('', include(router.urls)),
