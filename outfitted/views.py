@@ -3,7 +3,7 @@ This file is used to handle requests and return responses. Each view function ta
 """
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -36,8 +36,15 @@ class UserDetails(viewsets.GenericViewSet):
         serializer = UserDetailsSerializer(data=datareceived)
 
         # Check if data already exist or not
-        if UserDetails.objects.filter(**datareceived).exists():
-            return Response(status=status.HTTP_403_FORBIDDEN)
+        if models.UserDetails.objects.filter(**datareceived).exists():
+            error_response = {
+            "error": {
+                "code": 409,
+                "message": "User already exists",
+                "details": "The requested operation could not be completed because the user already exists."
+            }
+            }
+            return Response(error_response,status=status.HTTP_409_CONFLICT)
 
         # Validate the data entered by the user
         if serializer.is_valid():
@@ -45,6 +52,8 @@ class UserDetails(viewsets.GenericViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
     
     #  The detail=True argument means that this action operates on a single instance of the model, identified by the primary key (pk)
     @action(detail=True,methods=['patch'])
@@ -54,6 +63,9 @@ class UserDetails(viewsets.GenericViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            data = {
+            "message": f"New item added to Cart with id: {user.id}"
+            }
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)

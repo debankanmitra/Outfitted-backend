@@ -13,18 +13,13 @@ import uuid
 
 
 class UserDetails(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False,
-        unique=True,
-        auto_created=True,
+    id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False, unique=True, auto_created=True,
         )
     name = models.CharField(max_length=255)
     address = models.TextField(max_length=255,blank=True)
     email = models.EmailField(max_length=255,blank=True)
-    profile_pic = models.ImageField(max_length=255,blank=True)
-    wishlist = ArrayField(models.CharField(max_length=255),default=list)
+    profile_pic = models.ImageField(max_length=255,null=True,blank=True)
+    wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
 
     def __str__(self):
         return self.name
@@ -32,10 +27,10 @@ class UserDetails(models.Model):
 
 class Product(models.Model):
     productid = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, unique=True, editable=False
+        primary_key=True, default=uuid.uuid4, unique=True, editable=False, auto_created=True,
     )
     category = models.CharField(max_length=255)
-    Images = models.ImageField(max_length=255)
+    Images = models.ImageField(null=True,blank=True)
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -82,27 +77,28 @@ class Review(models.Model):
 # pass statement is a null operation, and it will not affect the interpretation of the class's fields.
 
 class Order(models.Model):
-    pass
-    # id = models.AutoField(primary_key=True)
-    # user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
-    # order_date = models.DateTimeField(auto_now_add=True)
-    # total_amount = models.DecimalField(max_digits=6, decimal_places=2)
-    # status = models.CharField(max_length=255)
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, unique=True, editable=False, auto_created=True,
+    )
+    user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now_add=True)
+    total_amount = models.DecimalField(max_digits=6, decimal_places=2)
+    status = models.CharField(max_length=255)
 
 
 class OrderItem(models.Model):
-    pass
-    # id = models.AutoField(primary_key=True)
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    # quantity = models.IntegerField()
-    # price = models.DecimalField(max_digits=6, decimal_places=2)
-    # order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    id = models.AutoField(primary_key=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
 
 class Payment(models.Model):
-    pass
-    # id = models.AutoField(primary_key=True)
-    # order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    # payment_date = models.DateTimeField(auto_now_add=True)
-    # amount = models.DecimalField(max_digits=6, decimal_places=2)
-    # method = models.CharField(max_length=255)
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, unique=True, editable=False, auto_created=True,
+    )
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
+    method = models.CharField(max_length=255)

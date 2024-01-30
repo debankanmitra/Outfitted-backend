@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'ecommercedb',
         'USER': 'debankan',
         'PASSWORD': os.environ.get('COCKROACH_POSTGRES_PASSWORD'),
-        'HOST': 'ecommerce-django-13244.7tt.aws-us-east-1.cockroachlabs.cloud',
+        'HOST': 'ecommercedb-13279.7tt.aws-us-east-1.cockroachlabs.cloud',
         'PORT': '26257',
         'OPTIONS': {
             'sslmode': 'verify-full',
