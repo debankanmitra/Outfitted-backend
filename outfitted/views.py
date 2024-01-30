@@ -64,9 +64,9 @@ class UserDetails(viewsets.GenericViewSet):
         if serializer.is_valid():
             serializer.save()
             data = {
-            "message": f"New item added to Cart with id: {user.id}"
+            "message": f"user details edited with id: {user.id}"
             }
-            return Response(status=status.HTTP_200_OK)
+            return Response(data,status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
