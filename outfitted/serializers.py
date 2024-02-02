@@ -12,7 +12,7 @@ from django.contrib.auth.hashers import make_password
 User = get_user_model()  # Retrieve the active user model
 
 
-# --------------------------------------------------------------------------------------
+# ------------------------------------- REGISTRATION -------------------------------------------------
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
@@ -20,7 +20,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'password', 'confirm_password', 'name', 'address', 'profile_pic', 'wishlist')  # Include all desired fields
-        #exclude = ('last_login', 'is_superuser', 'first_name', 'last_name', 'is_staff')
+        # exclude = ('last_login', 'is_superuser', 'first_name', 'last_name', 'is_staff')
 
     def save(self, attrs):
         if attrs['password'] != attrs['confirm_password']:
