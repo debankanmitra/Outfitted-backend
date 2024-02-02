@@ -7,10 +7,21 @@ Each model corresponds to a database table and defines the fields and behaviors 
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 import uuid
+from django.contrib.auth.models import AbstractUser
 
 
 # Create your models here.
 
+class User(AbstractUser):
+    id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    address = models.TextField(max_length=255,blank=True)
+    email = models.EmailField(max_length=255,blank=True,unique=True)
+    profile_pic = models.ImageField(max_length=255,null=True,blank=True, upload_to='profile_pics')
+    wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
+
+    def __str__(self):
+        return self.username
 
 class UserDetails(models.Model):
     id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False, unique=True, auto_created=True,

@@ -23,9 +23,9 @@ from . import views
 router = SimpleRouter()
 router.register(r'users', views.UserDetails, basename='users')
 
-# for patch
-# /users/{pk}/action_name/
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/', views.UserRegistrationView.as_view(), name='register'),
+    # path('login/', views.UserDetails.as_view(), name='login'),
 ]

@@ -3,17 +3,26 @@ This file is used to handle requests and return responses. Each view function ta
 """
 
 from django.shortcuts import render
+from rest_framework.views import APIView
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from . import models
-from .serializers import UserDetailsSerializer
+from .serializers import UserDetailsSerializer,UserRegistrationSerializer
 
 # Create your views here.
 
-
+# ----------------------------------------------------------------------------------
+class UserRegistrationView(APIView):
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(attrs=serializer.validated_data)
+            return Response({'message': 'User created successfully.'}, status=201)
+        return Response(serializer.errors, status=400)
+# -----------------------------------------------------------------------
 
 class UserDetails(viewsets.GenericViewSet):
     queryset = models.UserDetails.objects.all()
