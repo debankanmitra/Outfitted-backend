@@ -27,5 +27,5 @@ router.register(r'users', views.UserDetails, basename='users')
 urlpatterns = [
     path('', include(router.urls)),
     path('register/', views.UserRegistrationView.as_view(), name='register'),
-    # path('login/', views.UserDetails.as_view(), name='login'),
+    path('login/', views.LoginView.as_view(), name='login'),
 ]

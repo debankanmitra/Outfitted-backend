@@ -2,19 +2,19 @@
 This file is used to handle requests and return responses. Each view function takes a request object and returns a response object.
 """
 
-from django.shortcuts import render
+from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from . import models
-from .serializers import UserDetailsSerializer,UserRegistrationSerializer
+from .serializers import UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
 
 # Create your views here.
 
-# ----------------------------------------------------------------------------------
+# ------------------------------ REGISTRATION ----------------------------------------------------
 class UserRegistrationView(APIView):
     def post(self, request):
         serializer = UserRegistrationSerializer(data=request.data)
@@ -22,7 +22,24 @@ class UserRegistrationView(APIView):
             serializer.save(attrs=serializer.validated_data)
             return Response({'message': 'User created successfully.'}, status=201)
         return Response(serializer.errors, status=400)
-# -----------------------------------------------------------------------
+# ----------------------------------- LOGIN -------------------------------------
+# Upon receiving a request with an "Authorization" header, your API server performs token verification:
+# It extracts the token value from the header.
+# It validates the token's authenticity and integrity (e.g., using signature verification in complex token systems).
+# If valid, it retrieves the user associated with that token from the database.
+# If the token is valid and corresponds to an active user, the server grants access to the requested resource or endpoint based on the user's permissions.
+# The user can continue interacting with the API without needing to re-enter their credentials for each request.
+
+class LoginView(APIView):
+    permission_classes = [~IsAuthenticated]  # Allow only unauthenticated users
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key})
+# -----------------------------------------------------------------------------------
 
 class UserDetails(viewsets.GenericViewSet):
     queryset = models.UserDetails.objects.all()

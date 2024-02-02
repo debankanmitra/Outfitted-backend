@@ -8,6 +8,7 @@ from rest_framework import serializers
 from .models import UserDetails, Product, Cart , Review
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
 
 User = get_user_model()  # Retrieve the active user model
 
@@ -38,6 +39,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 # --------------------------------------------------------------------------------------
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        user = authenticate(request=self.context.get('request'),
+                            username=attrs.get('username'),
+                            password=attrs.get('password'))
+        if not user:
+            raise serializers.ValidationError("Invalid credentials")
+        attrs['user'] = user
+        return attrs
+# ------------------------------------------------------------------------------------------
     
 
 class UserDetailsSerializer(serializers.ModelSerializer):
