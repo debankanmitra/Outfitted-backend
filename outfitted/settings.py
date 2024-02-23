@@ -73,8 +73,8 @@ DATABASES = {
         'HOST': 'ecommercedb-13279.7tt.aws-us-east-1.cockroachlabs.cloud',
         'PORT': '26257',
         'OPTIONS': {
-            'sslmode': 'disable',
-            # 'sslrootcert': os.environ.get('ROOT_CRT'),
+            'sslmode': 'verify-full',
+            'ca': os.environ.get('ROOT_CRT'),
         },
     },
 }
