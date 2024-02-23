@@ -74,7 +74,7 @@ DATABASES = {
         'PORT': '26257',
         'OPTIONS': {
             'sslmode': 'verify-full',
-            'sslrootcert': os.environ.get('ROOT_CRT'),
+            # 'sslrootcert': os.environ.get('ROOT_CRT'),
         },
     },
 }

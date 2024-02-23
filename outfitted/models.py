@@ -19,6 +19,7 @@ class User(AbstractUser):
     email = models.EmailField(max_length=255,blank=True,unique=True)
     profile_pic = models.ImageField(max_length=255,null=True,blank=True, upload_to='profile_pics')
     wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
+    is_active = models.BooleanField()
 
     def __str__(self):
         return self.username
