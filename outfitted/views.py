@@ -30,6 +30,10 @@ class UserRegistrationView(APIView):
 # If the token is valid and corresponds to an active user, the server grants access to the requested resource or endpoint based on the user's permissions.
 # The user can continue interacting with the API without needing to re-enter their credentials for each request.
 
+#TODO: CHECK if login needs the generated token on the header or not as it is a token based authetication it must need it else we have to implement
+# For subsequent requests that require authentication, the client includes the token in the Authorization header of the HTTP request.
+# we can also implement session based authentication instead of token based authentication 
+
 class LoginView(APIView):
     permission_classes = [~IsAuthenticated]  # Allow only unauthenticated users
 

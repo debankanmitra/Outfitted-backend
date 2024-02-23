@@ -1,8 +1,6 @@
 django==4.2.9
 djangorestframework==3.14.0
-
 psycopg2-binary
 django-cockroachdb==4.2
 dj-database-url
-
 Pillow==10.2.0
