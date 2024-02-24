@@ -5,7 +5,7 @@ It includes database configurations, installed apps, middleware classes, templat
 
 import os
 from pathlib import Path
-
+#TODO: https://chat.openai.com/share/d395619d-7c43-4270-abac-bd5567bafb37
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,17 +16,23 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
+ALLOWED_HOSTS = ['.vercel.app','127.0.0.1','localhost:5173']
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:9000",
+    "http://localhost:5173",
+]
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.contenttypes', #TODO: contenttypes is not required for our application
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'outfitted',
 ]
 
@@ -45,6 +51,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

@@ -46,7 +46,7 @@ class LoginView(APIView):
 # -----------------------------------------------------------------------------------
 
 class UserDetails(viewsets.GenericViewSet):
-    queryset = models.UserDetails.objects.all()
+    queryset = models.User.objects.all()
     serializer_class = UserDetailsSerializer
     permission_classes = [AllowAny] # The AllowAny permission class allows unrestricted access, regardless of if the request was authenticated or unauthenticated.
 
@@ -54,7 +54,7 @@ class UserDetails(viewsets.GenericViewSet):
     # The @action decorator is used to add extra actions to a GenericViewSet, but it cannot be used on methods that already exist in the GenericViewSet.
     @action(detail=False,methods=['GET'])
     def RetrieveAllUsers(self, request):
-        queryset = models.UserDetails.objects.all()
+        queryset = models.User.objects.all()
         serializer= UserDetailsSerializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -66,7 +66,7 @@ class UserDetails(viewsets.GenericViewSet):
         serializer = UserDetailsSerializer(data=datareceived)
 
         # Check if data already exist or not
-        if models.UserDetails.objects.filter(**datareceived).exists():
+        if models.User.objects.filter(**datareceived).exists():
             error_response = {
             "error": {
                 "code": 409,
@@ -88,7 +88,7 @@ class UserDetails(viewsets.GenericViewSet):
     #  The detail=True argument means that this action operates on a single instance of the model, identified by the primary key (pk)
     @action(detail=True,methods=['patch'])
     def PatchUserDetail(self,request,pk):
-        user= models.UserDetails.objects.get(pk=pk)
+        user= models.User.objects.get(pk=pk)
         serializer = UserDetailsSerializer(instance=user,data=request.data, partial=True)
 
         if serializer.is_valid():

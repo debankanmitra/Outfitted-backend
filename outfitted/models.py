@@ -4,6 +4,7 @@ Each model corresponds to a database table and defines the fields and behaviors 
 """
 
 
+from email.policy import default
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 import uuid
@@ -13,28 +14,28 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
-    id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255)
+    id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False, unique=True, auto_created=True)
+    name = models.CharField(max_length=255,blank=True)
     address = models.TextField(max_length=255,blank=True)
-    email = models.EmailField(max_length=255,blank=True,unique=True)
+    email = models.EmailField(max_length=255,unique=True)
     profile_pic = models.ImageField(max_length=255,null=True,blank=True, upload_to='profile_pics')
     wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.username
 
-class UserDetails(models.Model):
-    id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False, unique=True, auto_created=True,
-        )
-    name = models.CharField(max_length=255)
-    address = models.TextField(max_length=255,blank=True)
-    email = models.EmailField(max_length=255,blank=True)
-    profile_pic = models.ImageField(max_length=255,null=True,blank=True)
-    wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
+# class UserDetails(models.Model):
+#     id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False, unique=True, auto_created=True,
+#         )
+#     name = models.CharField(max_length=255)
+#     address = models.TextField(max_length=255,blank=True)
+#     email = models.EmailField(max_length=255,blank=True)
+#     profile_pic = models.ImageField(max_length=255,null=True,blank=True)
+#     wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
     
 
 class Product(models.Model):
@@ -62,7 +63,7 @@ class Product(models.Model):
 
     
 class Cart(models.Model):
-    user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
@@ -73,7 +74,7 @@ class Cart(models.Model):
 # The on_delete=models.CASCADE option means that when a referenced ProductCard is deleted, 
     # also delete the ProductDetails instances associated with it.
 class Review(models.Model):
-    user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     review = models.TextField(max_length=255)
     rating = models.IntegerField()
@@ -92,7 +93,7 @@ class Order(models.Model):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, unique=True, editable=False, auto_created=True,
     )
-    user = models.ForeignKey(UserDetails, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(max_digits=6, decimal_places=2)
     status = models.CharField(max_length=255)
