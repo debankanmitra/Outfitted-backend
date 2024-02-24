@@ -16,7 +16,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
 
 
 # Application definition
@@ -73,7 +73,7 @@ DATABASES = {
         'HOST': 'ecommercedb-13279.7tt.aws-us-east-1.cockroachlabs.cloud',
         'PORT': '26257',
         'OPTIONS': {
-            'sslmode': 'verify-full',
+            'sslmode': 'prefer',
             # 'sslrootcert': os.environ.get('ROOT_CRT'),
         },
     },
