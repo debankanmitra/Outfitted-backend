@@ -17,7 +17,31 @@ from .serializers import UserDetailsSerializer,UserRegistrationSerializer,LoginS
 # ------------------------------ REGISTRATION ----------------------------------------------------
 class UserRegistrationView(APIView):
     def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
+        # Receive the data from the client side
+        datareceived=request.data
+        email = datareceived.get('email')
+        username = datareceived.get('username')
+        password = datareceived.get('password')
+        confirm_password = datareceived.get('confirm_password')
+        # Check if data already exist or not
+        if models.User.objects.filter(email=email).exists():
+            error_response = {
+                "message": "User with this email already exists."
+            }
+            return Response(error_response,status=status.HTTP_409_CONFLICT)
+        elif models.User.objects.filter(username=username).exists():
+            error_response = {
+                "message": "User with this username already exists."
+            }
+            return Response(error_response,status=status.HTTP_409_CONFLICT)
+        elif password != confirm_password:
+            error_response = {
+                "message": "Password fields didn't match."
+            }
+            return Response(error_response,status=status.HTTP_400_BAD_REQUEST)
+        
+        # Save the data in the database
+        serializer = UserRegistrationSerializer(data=datareceived)
         if serializer.is_valid():
             serializer.save(attrs=serializer.validated_data)
             return Response({'message': 'User created successfully.'}, status=201)
