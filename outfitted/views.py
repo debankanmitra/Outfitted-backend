@@ -112,9 +112,10 @@ class UserDetails(viewsets.GenericViewSet):
 
     
     #  The detail=True argument means that this action operates on a single instance of the model, identified by the primary key (pk)
-    @action(detail=True,methods=['patch'])
-    def PatchUserDetail(self,request,pk):
-        user= models.User.objects.get(pk=pk)
+    #  The detail=False argument means to indicate that this is not a detail route, and the URL does not need a specific user identifier.
+    @action(detail=False,methods=['patch'])
+    def PatchUserDetail(self,request):
+        user = request.user  # The authenticated user
         serializer = UserDetailsSerializer(instance=user,data=request.data, partial=True)
 
         if serializer.is_valid():
@@ -124,5 +125,5 @@ class UserDetails(viewsets.GenericViewSet):
             }
             return Response(data,status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
