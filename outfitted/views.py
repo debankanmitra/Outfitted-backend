@@ -8,6 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from . import models
 from .serializers import UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
@@ -66,13 +67,14 @@ class LoginView(APIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        return Response({'token': str(token)})
 # -----------------------------------------------------------------------------------
 
 class UserDetails(viewsets.GenericViewSet):
     queryset = models.User.objects.all()
     serializer_class = UserDetailsSerializer
-    permission_classes = [AllowAny] # The AllowAny permission class allows unrestricted access, regardless of if the request was authenticated or unauthenticated.
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated] # The AllowAny permission class allows unrestricted access, regardless of if the request was authenticated or unauthenticated.
 
     # The error message indicates that you're trying to use the @action decorator on a method (retrieve) that already exists in the GenericViewSet. 
     # The @action decorator is used to add extra actions to a GenericViewSet, but it cannot be used on methods that already exist in the GenericViewSet.
