@@ -22,7 +22,7 @@ from . import views
 
 router = SimpleRouter()
 router.register(r'users', views.UserDetails, basename='users')
-
+router.register(r'products', views.ProductViewSet, basename='products')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -5,10 +5,12 @@ Each model corresponds to a database table and defines the fields and behaviors 
 
 
 from email.policy import default
+from enum import unique
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 import uuid
 from django.contrib.auth.models import AbstractUser
+
 
 
 # Create your models here.
@@ -24,40 +26,29 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
-
-# class UserDetails(models.Model):
-#     id = models.UUIDField( primary_key=True, default=uuid.uuid4, editable=False, unique=True, auto_created=True,
-#         )
-#     name = models.CharField(max_length=255)
-#     address = models.TextField(max_length=255,blank=True)
-#     email = models.EmailField(max_length=255,blank=True)
-#     profile_pic = models.ImageField(max_length=255,null=True,blank=True)
-#     wishlist = ArrayField(models.CharField(max_length=255),default=list,null=True,blank=True)
-
-#     def __str__(self):
-#         return self.name
     
 
 class Product(models.Model):
+    
     productid = models.UUIDField(
         primary_key=True, default=uuid.uuid4, unique=True, editable=False, auto_created=True,
     )
     category = models.CharField(max_length=255)
-    Images = models.ImageField(null=True,blank=True)
+    Images = models.CharField(max_length=255, unique=True, blank=True, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=255)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    ratings = models.IntegerField()
+    ratings = models.FloatField()
     buys = models.IntegerField()
     mrp = models.DecimalField(max_digits=6, decimal_places=2)
-    discount = models.PositiveIntegerField()
+    discount = models.FloatField()
 
     title = models.TextField(max_length=255,  blank=True)
     size = models.CharField(max_length=255,  blank=True) # for choice: https://docs.djangoproject.com/en/5.0/topics/db/models/
     product_code = models.CharField(max_length=255,  blank=True)
     color = models.CharField(max_length=255,  blank=True)
     seller = models.CharField(blank=True)
-
+        
     def __str__(self):
         return self.name
 
