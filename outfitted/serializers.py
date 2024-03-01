@@ -65,6 +65,11 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['productid', 'category', 'Images', 'name', 'description', 'price', 'ratings', 'buys', 'mrp', 'discount', 'title', 'size', 'product_code', 'color', 'seller']
 
+class ProductCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['productid', 'category', 'Images', 'name', 'price', 'ratings', 'discount', 'seller']
+
 class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart

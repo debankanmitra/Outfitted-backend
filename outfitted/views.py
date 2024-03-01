@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from . import models
-from .serializers import CartSerializer, ProductSerializer, UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
+from .serializers import CartSerializer, ProductCardSerializer, ProductSerializer, UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
 
 # Create your views here.
 
@@ -131,7 +131,15 @@ class UserDetails(viewsets.GenericViewSet):
 # ask: https://www.phind.com/agent?cache=clt4estfv000pky08ok0p9moz
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Product.objects.all()
-    serializer_class = ProductSerializer
+    
+    def get_serializer_class(self):
+         # Determine the serializer class based on the action name
+        if self.action == 'list':
+            return ProductCardSerializer
+        # elif self.action == 'retrieve':
+        return ProductSerializer
+        # Add more conditions here if you have more actions
+        # return super().get_serializer_class()
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
@@ -139,16 +147,18 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def get(self, request):
+
+  
+    def list(self, _):
         query = models.Product.objects.all()
-        serializer = ProductSerializer(query, many=True)
+        serializer = self.get_serializer(query, many=True)
         return Response(serializer.data)
     
     def getById(self, request, item_id):
         query = models.Product.objects.get(id=item_id)
-        serializer = ProductSerializer(query)
+        serializer = self.get_serializer(query)
         return Response(serializer.data)
+    
         
 
 
