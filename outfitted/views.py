@@ -144,6 +144,11 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         query = models.Product.objects.all()
         serializer = ProductSerializer(query, many=True)
         return Response(serializer.data)
+    
+    def getById(self, request, item_id):
+        query = models.Product.objects.get(id=item_id)
+        serializer = ProductSerializer(query)
+        return Response(serializer.data)
         
 
 
