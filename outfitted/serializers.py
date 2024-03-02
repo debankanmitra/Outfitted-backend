@@ -9,6 +9,9 @@ from .models import User, Product, Cart , Review
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
+from django_filters import rest_framework as filters
+
+
 
 User = get_user_model()  # Retrieve the active user model
 
@@ -69,6 +72,11 @@ class ProductCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['productid', 'category', 'Images', 'name', 'price', 'ratings', 'discount', 'seller']
+
+# class ProductFilter(filters.FilterSet):
+#     class Meta:
+#         model = Product
+#         fields = ['category', 'name', 'price', 'ratings', 'discount', 'seller']
 
 class CartSerializer(serializers.ModelSerializer):
     class Meta:

@@ -4,13 +4,19 @@ This file is used to handle requests and return responses. Each view function ta
 
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets,status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
+
 from . import models
+from .filters import ProductFilter
+
 from .serializers import CartSerializer, ProductCardSerializer, ProductSerializer, UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
 
 # Create your views here.
@@ -131,15 +137,20 @@ class UserDetails(viewsets.GenericViewSet):
 # ask: https://www.phind.com/agent?cache=clt4estfv000pky08ok0p9moz
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Product.objects.all()
+    # filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['category']
     
+    # we are overriding the get_serializer_class method to determine the serializer class based on the action.
+    # get_serializer_class method is used to determine the serializer class based on the action, 
+    # and then get_serializer is used to instantiate the serializer with the appropriate queryset or instance. 
+    # get_serializer_class method is responsible for deciding which serializer class to use, while the get_serializer method
+    # is responsible for creating an instance of the serializer with the appropriate data. This separation makes the code more
+    # modular and easier to maintain.
+    # https://www.phind.com/agent?cache=clt8tw8yd000vk008b969xbrp
     def get_serializer_class(self):
-         # Determine the serializer class based on the action name
         if self.action == 'list':
             return ProductCardSerializer
-        # elif self.action == 'retrieve':
         return ProductSerializer
-        # Add more conditions here if you have more actions
-        # return super().get_serializer_class()
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
@@ -159,7 +170,12 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(query)
         return Response(serializer.data)
     
-        
+class ProductList(ListAPIView):   
+    queryset = models.Product.objects.all()
+    serializer_class = ProductCardSerializer
+    filterset_class = ProductFilter
+    # filter_backends = (filters.DjangoFilterBackend)
+    # filterset_fields = ('category', 'name', 'price', 'ratings', 'discount', 'seller')
 
 
 # -------------------------------------------------------------------------------------------------------------------
