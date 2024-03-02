@@ -23,14 +23,14 @@ from . import views
 router = SimpleRouter()
 router.register(r'users', views.UserDetails, basename='users')
 router.register(r'products', views.ProductViewSet, basename='products')
-# router.register(r'productlist', views.ProductList, basename='productlist')
+router.register(r'productlist', views.ProductList, basename='productlist')
 
 
 
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('productlist/', views.ProductList.as_view(), name='productlist'),
+    # path('productlist/', views.ProductList.as_view(), name='productlist'),
     path('register/', views.UserRegistrationView.as_view(), name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
 ]
