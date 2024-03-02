@@ -170,7 +170,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = self.get_serializer(query)
         return Response(serializer.data)
     
-class ProductList(ListAPIView):   
+class ProductList(viewsets.ReadOnlyModelViewSet):   
     queryset = models.Product.objects.all()
     serializer_class = ProductCardSerializer
     filterset_class = ProductFilter
