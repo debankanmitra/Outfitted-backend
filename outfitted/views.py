@@ -2,6 +2,8 @@
 This file is used to handle requests and return responses. Each view function takes a request object and returns a response object.
 """
 
+from pyexpat import model
+from uuid import UUID
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
@@ -17,7 +19,7 @@ from django_filters import rest_framework as filters
 from . import models
 from .filters import ProductFilter
 
-from .serializers import CartSerializer, ProductCardSerializer, ProductSerializer, UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
+from .serializers import CartSerializer, ProductCardSerializer, ProductSerializer, ReviewSerializer, UserDetailsSerializer,UserRegistrationSerializer,LoginSerializer
 
 # Create your views here.
 
@@ -178,7 +180,32 @@ class ProductList(viewsets.ReadOnlyModelViewSet):
     # filterset_fields = ('category', 'name', 'price', 'ratings', 'discount', 'seller')
 
 
-# -------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------REVIEWS-----------------------------------------------------------------
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = models.Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    # the problem that was happening is that it was showing details not found when i searched using productid
+    # the problem occur because if it is not explicitly mentioned in the url it will take the productid as PK
+    # a productid is not primary key we have to explicitly mention it in the url: (?P<productid>[^/.]+
+    # https://www.phind.com/agent?cache=cltfl1lk5001sjy0803k7dzuh
+    def list(self, request, productid):
+        queryset = models.Review.objects.filter(productid=productid)  # Explicit filtering
+        serializer = ReviewSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, productid):
+        # Include productid in the data to be serialized
+        data = request.data.copy()
+        data['productid'] = productid
+        # review, created = models.Review.objects.get_or_create(productid=productid)
+        serializer = ReviewSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# ---------------------------------------------------CART----------------------------------------------------------------
 class CartViewSet(viewsets.ModelViewSet):
     queryset = models.Cart.objects.all()
     serializer_class = CartSerializer

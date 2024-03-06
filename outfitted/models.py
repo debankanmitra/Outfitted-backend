@@ -65,16 +65,15 @@ class Cart(models.Model):
 # The on_delete=models.CASCADE option means that when a referenced ProductCard is deleted, 
     # also delete the ProductDetails instances associated with it.
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    review = models.TextField(max_length=255)
-    rating = models.IntegerField()
-    date = models.DateField()
-    likes = models.IntegerField()
-    dislikes = models.IntegerField()
+    productid = models.UUIDField(blank=True, null=True)
+    name = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    imgsrc = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    message = models.TextField(max_length=255, blank=True)
+    ratings = models.IntegerField(blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.product
+        return f"{self.productid} - {self.name}"
 
 
 # extras ------------------------------------------------------------------

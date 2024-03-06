@@ -24,6 +24,7 @@ router = SimpleRouter()
 router.register(r'users', views.UserDetails, basename='users')
 router.register(r'products', views.ProductViewSet, basename='products')
 router.register(r'productlist', views.ProductList, basename='productlist')
+router.register(r'reviews/(?P<productid>[^/.]+)', views.ReviewViewSet, basename='reviews')
 
 
 
