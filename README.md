@@ -9,10 +9,10 @@
 - Cloudinary for efficient handling of static files
 
 ## 🛠️ Tech Stack
-Backend: Python Django
-Database: CockroachDB
-Digital assets: Cloudinary
-Infrastructure: AWS
+- Backend: Python Django
+- Database: CockroachDB
+- Digital assets: Cloudinary
+- Infrastructure: AWS
 
 ## 📦 Installation and setup
 1. Clone the repository:
